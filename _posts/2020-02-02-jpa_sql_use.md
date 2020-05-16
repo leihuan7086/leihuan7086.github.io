@@ -1,0 +1,88 @@
+---
+title: SpringDataJPA|JPQL|NativeSQL查询数据库总结
+date: 2020-02-02
+category: Spring Cloud
+tags: JPA NativeSQL
+description: 文章对比了SpringDataJPA、JPQL、NativeSQL三种技术查询数据库时到区别，并对NativeSQL的实用性场景进行了扩展
+---
+
+### 背景说明
+
+“一个项目页面有多种查询方式，对应N个参数，而这N个参数可能有，也可能没有。“
+
+项目开发中会遇到很多类似这样的需求，很多开发者习惯性使用JPA的EntityManager.createNativeQuery()写一大堆代码来执行原生sql语句。
+
+其实JPA的@Query(nativeQuery = true)注解可以在方法上直接使用原生sql。
+
+*注意JPA版本一定要使用2.0之后的版本，早期1.x的版本存在bug，@Modifying注解的方法无法使用`Pageable`参数。*
+
+### 参考文档
+
+[https://stackoverflow.com/questions/38349930/spring-data-and-native-query-with-pagination](https://stackoverflow.com/questions/38349930/spring-data-and-native-query-with-pagination)
+
+[https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.at-query](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.at-query)
+
+### 三者对比
+
+**JPA:**
+
+```java
+List<User> findByNameLike(String name);
+```
+
+**JPQL(实体对象类名、属性)：**
+
+```java
+@Query("select u from User u where u.name like %?1")
+List<User> findUsersByParams(String name);
+```
+
+**NativeSQL(数据库表名、列):**
+
+```java
+@Query(value = "SELECT * FROM user WHERE name like ?1", nativeQuery = true)
+List<User> findUsersByParams(String name);
+```
+
+### 举个栗子
+
+场景：通过name过滤所有满足要求的user。即需要满足：
+
+1) name为null，查询所有user
+
+2) name不为null，根据name过滤
+
+答案：JPA (✖)   JPQL (✖)   *NativeSQL (✔)*
+
+```java
+// null在NativeSQL 中用''表示
+@Query(value = "SELECT * FROM user WHERE if(name != '', name like ?1, 1 = 1)", nativeQuery = true)
+List<User> findUsersByParams(String name);
+```
+
+### NativeSQL扩展
+
+1) String出现空串，List出现size为0场景处理：
+
+```java
+if (StringUtils.isEmpty(name.trim())) {
+    name = null;
+}
+if (CollectionUtils.isEmpty(ids))) {
+    ids = null;
+}
+// 说明：切记(?1)必须有括号，"ids IN NULL"运行会有语法报错，而"ids IN (NULL)"运行ok
+@Query(value = "SELECT * FROM user WHERE if(?1 != '', id IN (?1), 1 = 1) AND if(name != '', name like ?2, 1 = 1)", nativeQuery = true) 
+List<User> findUsersByParams(List<Integer> ids, String name);
+```
+
+2) 对查询结果增加**排序和分页**功能
+
+```java
+// id增序排列
+Pageable pageable = new PageRequest(page, size, new Sort(Sort.Direction.ASC, "id"));
+// mySql分页语法为：ORDER BY ?#{#pageable}
+@Query(value = "SELECT * FROM user WHERE if(?1 != '', id IN (?1), 1 = 1) AND if(name != '', name like ?2, 1 = 1) ORDER BY ?#{#pageable}", nativeQuery = true) 
+Page<User> findUsersByParams(List<Integer> ids, String name, Pageable pageable);
+```
+
