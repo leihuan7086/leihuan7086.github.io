@@ -3,23 +3,17 @@ title: SpringDataJPA|JPQL|NativeSQL查询数据库总结
 date: 2020-02-02
 category: Spring Cloud
 tags: JPA NativeSQL
-description: 文章对比了SpringDataJPA、JPQL、NativeSQL三种技术查询数据库时到区别，并对NativeSQL的实用性场景进行了扩展
+description: 文章对比了SpringDataJPA、JPQL、NativeSQL三种技术查询数据库时到区别，并对NativeSQL的实用性场景进行了扩展。
 ---
 
 ### 背景说明
 
-“一个项目页面有多种查询方式，对应N个参数，而这N个参数可能有，也可能没有。“
-
-项目开发中会遇到很多类似这样的需求，很多开发者习惯性使用JPA的EntityManager.createNativeQuery()写一大堆代码来执行原生sql语句。
-
-其实JPA的@Query(nativeQuery = true)注解可以在方法上直接使用原生sql。
-
+“一个项目页面有多种查询方式，对应N个参数，而这N个参数可能有，也可能没有。“项目开发中会遇到很多类似这样的需求，很多开发者习惯性使用JPA的EntityManager.createNativeQuery()写一大堆代码来执行原生sql语句。其实JPA的@Query(nativeQuery = true)注解可以在方法上直接使用原生sql。
 *注意JPA版本一定要使用2.0之后的版本，早期1.x的版本存在bug，@Modifying注解的方法无法使用`Pageable`参数。*
 
 ### 参考文档
 
 [https://stackoverflow.com/questions/38349930/spring-data-and-native-query-with-pagination](https://stackoverflow.com/questions/38349930/spring-data-and-native-query-with-pagination)
-
 [https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.at-query](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.at-query)
 
 ### 三者对比
