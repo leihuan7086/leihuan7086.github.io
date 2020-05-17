@@ -3,7 +3,8 @@
 ## Docs: https://jekyllrb.com/docs/configuration/
 # ---------------------------------------------------------------
 
-repository: leihuan7086/leihuan7086.github.io
+# gitlab.com编译需要此项
+repository: leihuan7086/leihuan7086.gitlab.io
 
 # Site
 title: 一點咖啡
@@ -217,7 +218,7 @@ font:
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
 social:
   #LinkLabel: Link
-  GitHub: https://github.com/whutlh2012
+  GitHub: https://github.com/leihuan7086
   E-Mail: mailto:leihuan7086@gmail.com
 
 
