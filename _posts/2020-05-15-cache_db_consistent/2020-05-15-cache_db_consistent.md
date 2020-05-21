@@ -1,5 +1,4 @@
 ---
-published: false
 title: 缓存与数据库一致性_大结局
 date: 2020-05-15
 category: 数据库
