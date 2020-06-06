@@ -3,10 +3,8 @@ title: odl-pce项目从karaf架构迁移到lighty.io架构
 date: 2020-06-06
 category: OpenDaylight
 tags: Lighty
-description: 
+description: odl项目多模块化开发后，使用karaf容器部署会显得项目很臃肿，运行时消耗内存大并且性能很低。odl开发团队基于优化odl项目性能大初衷，开发了lighty轻量级的odl运行容器（lighty不支持osgi/karaf）。odl项目在满足一定的约束条件下，可以迁移至lighty容器运行，可一定程度的优化odl项目性能。
 ---
-
-
 
 ## 版本选择
 
