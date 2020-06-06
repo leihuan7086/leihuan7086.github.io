@@ -26,7 +26,7 @@ jdk版本>=1.8
 
 ## lighty模块开发
 
-lighty.io不支持osgi/karaf，odl迁移到lighty时需要删除osgi/karaf依赖（transportpce天然没有这些依赖），buluprint文件bean注册机制迁移到lighty后需要手动编码实例化注册，具体步骤如下：
+lighty.io不支持osgi/karaf，odl迁移到lighty时需要删除osgi/karaf依赖（transportpce天然没有这些依赖），buleprint文件bean注册机制迁移到lighty后需要手动编码实例化注册，具体步骤如下：
 
 ### 1）添加依赖pom
 
@@ -52,7 +52,9 @@ TPCEUtils类中添加transportpce编译后的yang-models目录
 
 ```java
 // 部分代码示例
-public static final Set<YangModuleInfo> TPCE_MODELS = ImmutableSet.of(          org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.$YangModuleInfoImpl.getInstance(),         org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.$YangModuleInfoImpl.getInstance()
+public static final Set<YangModuleInfo> TPCE_MODELS = ImmutableSet.of(
+  org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev161014.$YangModuleInfoImpl.getInstance(),
+  org.opendaylight.yang.gen.v1.http.org.openroadm.alarm.rev181019.$YangModuleInfoImpl.getInstance()
 );
 ```
 
